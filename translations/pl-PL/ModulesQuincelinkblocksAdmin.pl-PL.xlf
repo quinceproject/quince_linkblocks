@@ -156,6 +156,23 @@
         <target>Listy odnośników pokazywane w sklepie. Najczęściej w stopce.</target>
       </trans-unit>
 
+      <trans-unit id="quince.linkblocks.invalid_token">
+        <source>Invalid security token, please try again.</source>
+        <target>Nieprawidłowy token bezpieczeństwa, spróbuj ponownie.</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.settings_saved">
+        <source>Settings saved.</source>
+        <target>Ustawienia zapisane.</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.no_blocks">
+        <source>No blocks yet.</source>
+        <target>Nie ma jeszcze bloków.</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.hook.same_as_footer">
+        <source>The same one you set for a footer column.</source>
+        <target>Ten sam, który ustawiasz dla kolumny stopki.</target>
+      </trans-unit>
+
     </body>
   </file>
 </xliff>
