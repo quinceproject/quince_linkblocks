@@ -1,0 +1,30 @@
+# Ekran bloków odnośników.
+#
+# `_legacy_controller` wskazuje zakładkę silnika, bo moduł bez niego nie działa —
+# nie zakładamy własnej zakładki tylko po to, żeby PrestaShop miał gdzie sprawdzić
+# uprawnienia.
+quince_linkblocks:
+  path: quince/linkblocks
+  methods: [GET]
+  defaults:
+    _controller: Quince\LinkBlocks\Controller\Admin\BlocksController::indexAction
+    _legacy_controller: 'AdminQuince'
+    _legacy_link: 'AdminQuince'
+
+quince_linkblocks_save:
+  path: quince/linkblocks/save
+  methods: [POST]
+  defaults:
+    _controller: Quince\LinkBlocks\Controller\Admin\BlocksController::saveAction
+    _legacy_controller: 'AdminQuince'
+    _legacy_link: 'AdminQuince:save'
+
+quince_linkblocks_delete:
+  path: quince/linkblocks/delete/{id}
+  methods: [POST]
+  requirements:
+    id: \d+
+  defaults:
+    _controller: Quince\LinkBlocks\Controller\Admin\BlocksController::deleteAction
+    _legacy_controller: 'AdminQuince'
+    _legacy_link: 'AdminQuince:delete'

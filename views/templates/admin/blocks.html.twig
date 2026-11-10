@@ -1,0 +1,394 @@
+{# Ekran modułu w stylistyce silnika: ten sam layout, te same makra pól.
+   Moduł nie ma własnego CSS-u ani własnego sidebara, bierze je stąd. #}
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/tree.html.twig' as tree %}
+
+{% trans_default_domain 'Modules.Quincelinkblocks.Admin' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine-sort.min.js') ~ qcVer }}" defer></script>
+    {{ tree.assets(qcVer) }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+{% endblock %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-linkblocks" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+{# Dane drzewa raz na stronę: wszystkie wybieraki kategorii w powtarzalniku
+   czytają tę samą tablicę, zamiast każdy nieść własną kopię stu kategorii. #}
+{{ tree.dane('QUINCE_KATEGORIE', categories, null)|raw }}
+
+
+<form id="quince-linkblocks" method="post" action="{{ path('quince_linkblocks_save') }}"
+      class="qc-stack" x-data="quinceLinkBlocks()">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_linkblocks_save') }}">
+
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Blocks'|trans }}</div>
+            </div>
+            <button type="button" class="qc-btn qc-btn-outline" @click="addBlock()">
+                {{ icons.icon('plus', 14) }} {{ 'Add block'|trans }}
+            </button>
+        </div>
+
+        <div class="qc-card-body">
+            <div class="qc-empty" x-show="!blocks.length" x-cloak>
+                <div class="qc-empty-text" style="padding:14px">
+                    {{ 'No blocks yet.'|trans }}
+                </div>
+            </div>
+
+            <div class="qc-repeater" x-sort="moveBlock($item, $position)">
+                <template x-for="(block, index) in blocks" :key="block.uid">
+                    <div class="qc-rep-row" x-sort:item="block.uid">
+                        <div class="qc-rep-row-head">
+                            <span class="qc-rep-handle" x-sort:handle>{{ icons.icon('drag', 14) }}</span>
+
+                            <span class="qc-rep-name">
+                                <span x-text="blockLabel(block)"></span>
+                                <span class="qc-rep-sub">
+                                    <span x-text="block.hook"></span>
+                                    · <span x-text="block.links.length"></span>
+                                    <span x-text="block.links.length === 1
+                                        ? '{{ 'link'|trans }}' : '{{ 'links'|trans }}'"></span>
+                                </span>
+                            </span>
+
+                            <div class="qc-rep-actions">
+                                <button type="button" class="qc-icon-btn" @click="block.open = !block.open">
+                                    <svg class="qc-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"
+                                         stroke="currentColor" stroke-width="2" aria-hidden="true"
+                                         :style="block.open && 'transform:rotate(180deg)'"><path d="m4 6 4 4 4-4"/></svg>
+                                </button>
+                                <button type="button" class="qc-icon-btn qc-danger" @click="removeBlock(index)">
+                                    {{ icons.icon('trash', 14) }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="qc-rep-body" x-show="block.open" x-cloak>
+                            <input type="hidden" :name="'block[' + index + '][id]'" :value="block.id">
+                            <input type="hidden" :name="'block[' + index + '][position]'" :value="index">
+                            <input type="hidden" :name="'block[' + index + '][active]'" :value="block.active ? '1' : '0'">
+                            <input type="hidden" :name="'block[' + index + '][show_name]'" :value="block.show_name ? '1' : '0'">
+
+                            <div class="qc-form-grid qc-form-grid-3">
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Heading'|trans }}</label>
+                                    <div class="qc-multilang-row">
+                                        <template x-for="lang in languages" :key="lang.id">
+                                            <input type="text" class="qc-field-base qc-focusable"
+                                                   :name="'block[' + index + '][names][' + lang.id + ']'"
+                                                   x-show="block.lang === lang.id"
+                                                   x-model="block.names[lang.id]">
+                                        </template>
+
+                                        <button type="button" class="qc-lang-toggle" @click="block.langOpen = !block.langOpen">
+                                            <span class="qc-lang-dot"
+                                                  :class="String(block.names[block.lang] || '').trim() && 'qc-complete'"></span>
+                                            <span x-text="languages.find(l => l.id === block.lang).iso"></span>
+                                            <svg class="qc-icon" width="12" height="12" viewBox="0 0 16 16" fill="none"
+                                                 stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+                                        </button>
+
+                                        <div class="qc-lang-menu" x-show="block.langOpen" x-cloak
+                                             @click.outside="block.langOpen = false">
+                                            <template x-for="lang in languages" :key="lang.id">
+                                                <div class="qc-lang-row" :class="block.lang === lang.id && 'qc-current'"
+                                                     @click="block.lang = lang.id; block.langOpen = false">
+                                                    <span class="qc-lang-dot"
+                                                          :class="String(block.names[lang.id] || '').trim() && 'qc-complete'"></span>
+                                                    <span class="qc-lang-row-name" x-text="lang.name"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Hook'|trans }}</label>
+                                    <input type="text" class="qc-field-base qc-focusable"
+                                           :name="'block[' + index + '][hook]'" x-model="block.hook"
+                                           spellcheck="false">
+                                    <div class="qc-hint">{{ 'The same one you set for a footer column.'|trans }}</div>
+                                </div>
+
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Block'|trans }}</label>
+                                    <label class="qc-toggle">
+                                        <input type="checkbox" x-model="block.active">
+                                        <span class="qc-toggle-track"></span>
+                                        <span class="qc-toggle-text">{{ 'Shown in the shop'|trans }}</span>
+                                    </label>
+
+                                    <label class="qc-toggle" style="margin-block-start:10px">
+                                        <input type="checkbox" x-model="block.show_name">
+                                        <span class="qc-toggle-track"></span>
+                                        <span class="qc-toggle-text">{{ 'Heading visible'|trans }}</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {# ── odnośniki bloku ── #}
+                            <div style="margin-block:18px 10px">
+                                <span class="qc-label">{{ 'Links'|trans }}</span>
+                            </div>
+
+                            <div class="qc-repeater" x-sort="moveLink(block, $item, $position)">
+                                <template x-for="(link, li) in block.links" :key="link.uid">
+                                    <div class="qc-rep-row" x-sort:item="link.uid">
+                                        <div class="qc-rep-row-head">
+                                            <span class="qc-rep-handle" x-sort:handle>{{ icons.icon('drag', 14) }}</span>
+
+                                            <span class="qc-rep-name">
+                                                <span x-text="linkLabel(link)"></span>
+                                                <span class="qc-rep-sub" x-text="typeLabel(link.type)"></span>
+                                            </span>
+
+                                            <div class="qc-rep-actions">
+                                                <button type="button" class="qc-icon-btn" @click="link.open = !link.open">
+                                                    <svg class="qc-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"
+                                                         stroke="currentColor" stroke-width="2" aria-hidden="true"
+                                                         :style="link.open && 'transform:rotate(180deg)'"><path d="m4 6 4 4 4-4"/></svg>
+                                                </button>
+                                                <button type="button" class="qc-icon-btn qc-danger" @click="block.links.splice(li, 1)">
+                                                    {{ icons.icon('trash', 14) }}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="qc-rep-body" x-show="link.open" x-cloak>
+                                            <input type="hidden" :name="'block[' + index + '][links][' + li + '][type]'" :value="link.type">
+                                            <input type="hidden" :name="'block[' + index + '][links][' + li + '][new_tab]'" :value="link.new_tab ? '1' : '0'">
+
+                                            <div class="qc-form-grid"
+                                                 style="grid-template-columns:minmax(150px,1fr) minmax(150px,1fr) minmax(150px,1fr) auto auto">
+                                                <div class="qc-field">
+                                                    <label class="qc-label">{{ 'Points at'|trans }}</label>
+                                                    <div class="qc-select-wrap">
+                                                        <select class="qc-field-base qc-select qc-focusable" x-model="link.type">
+                                                            {% for value, label in {'category': 'Category'|trans, 'cms': 'Content page'|trans, 'custom': 'Address of your own'|trans} %}
+                                                                <option value="{{ value }}">{{ label }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                                                    </div>
+                                                </div>
+
+                                                {# Pole wyszukiwania, nie drzewo: w powtarzalniku każdy odnośnik
+                                                   miałby własny rozwijany panel na pół ekranu. #}
+                                                <div x-show="link.type === 'category'" x-cloak>
+                                                    {{ tree.szukajka(
+                                                        'QUINCE_KATEGORIE', [],
+                                                        "'block[' + index + '][links][' + li + '][id_category]'",
+                                                        'Category'|trans, false, null, true, 'link.id_category'
+                                                    ) }}
+                                                </div>
+
+                                                <div class="qc-field" x-show="link.type === 'cms'" x-cloak>
+                                                    <label class="qc-label">{{ 'Content page'|trans }}</label>
+                                                    <div class="qc-select-wrap">
+                                                        <select class="qc-field-base qc-select qc-focusable"
+                                                                :name="'block[' + index + '][links][' + li + '][id_cms]'"
+                                                                x-model.number="link.id_cms">
+                                                            <option value="0">{{ 'choose'|trans }}</option>
+                                                            {% for page in pages %}
+                                                                <option value="{{ page.id }}">{{ page.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="qc-field">
+                                                    <label class="qc-label">{{ 'Caption'|trans }}</label>
+                                                    <template x-for="lang in languages" :key="lang.id">
+                                                        <input type="text" class="qc-field-base qc-focusable"
+                                                               :name="'block[' + index + '][links][' + li + '][labels][' + lang.id + ']'"
+                                                               x-show="link.lang === lang.id"
+                                                               x-model="link.labels[lang.id]">
+                                                    </template>
+                                                    <div class="qc-hint" x-show="link.type !== 'custom'" x-cloak>
+                                                        {{ 'Leave empty to use the name from the catalogue.'|trans }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="qc-field" x-show="link.type === 'custom'" x-cloak>
+                                                    <label class="qc-label">{{ 'Address'|trans }}</label>
+                                                    <template x-for="lang in languages" :key="lang.id">
+                                                        <input type="text" class="qc-field-base qc-focusable"
+                                                               :name="'block[' + index + '][links][' + li + '][urls][' + lang.id + ']'"
+                                                               x-show="link.lang === lang.id"
+                                                               x-model="link.urls[lang.id]"
+                                                               spellcheck="false">
+                                                    </template>
+                                                    <div class="qc-hint">{{ 'Each language can point somewhere else.'|trans }}</div>
+                                                </div>
+
+                                                {# Jeden przełącznik na cały odnośnik: nazwa i adres to dwa pola
+                                                   tej samej pozycji w tym samym języku. Ten sam przełącznik,
+                                                   co przy każdym innym polu wielojęzycznym w panelu. #}
+                                                <div class="qc-field">
+                                                    <label class="qc-label">{{ 'Language'|trans }}</label>
+                                                    <div class="qc-multilang-row">
+                                                        <button type="button" class="qc-lang-toggle" @click="link.langOpen = !link.langOpen">
+                                                            <span class="qc-lang-dot"
+                                                                  :class="linkFilled(link, link.lang) && 'qc-complete'"></span>
+                                                            <span x-text="languages.find(l => l.id === link.lang).iso"></span>
+                                                            <svg class="qc-icon" width="12" height="12" viewBox="0 0 16 16" fill="none"
+                                                                 stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+                                                        </button>
+
+                                                        <div class="qc-lang-menu" x-show="link.langOpen" x-cloak
+                                                             @click.outside="link.langOpen = false">
+                                                            <template x-for="lang in languages" :key="lang.id">
+                                                                <div class="qc-lang-row" :class="link.lang === lang.id && 'qc-current'"
+                                                                     @click="link.lang = lang.id; link.langOpen = false">
+                                                                    <span class="qc-lang-dot"
+                                                                          :class="linkFilled(link, lang.id) && 'qc-complete'"></span>
+                                                                    <span class="qc-lang-row-name" x-text="lang.name"></span>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="qc-field">
+                                                    <label class="qc-label">{{ 'In a new tab'|trans }}</label>
+                                                    <label class="qc-toggle">
+                                                        <input type="checkbox" x-model="link.new_tab">
+                                                        <span class="qc-toggle-track"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+
+                            {# Przycisk pod listą: przy kilkudziesięciu pozycjach dokładanie
+                               kolejnej nie może wymagać wracania na początek. #}
+                            <div style="display:flex; justify-content:flex-end; margin-block-start:10px">
+                                <button type="button" class="qc-btn qc-btn-outline" @click="addLink(block)">
+                                    {{ icons.icon('plus', 14) }} {{ 'Add link'|trans }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script>
+function quinceLinkBlocks() {
+    const LANGUAGES = {{ languages|map(l => {id: l.id_lang, name: l.name, iso: l.iso_code|upper, default: l.default})|json_encode|raw }};
+    const SAVED = {{ blocks|json_encode|raw }};
+    const TYPES = {
+        category: {{ 'Category'|trans|json_encode|raw }},
+        cms: {{ 'Content page'|trans|json_encode|raw }},
+        custom: {{ 'Address of your own'|trans|json_encode|raw }}
+    };
+
+    // Domyślny język sklepu, nie pierwszy z listy: pole otwarte na obcym języku
+    // zbiera teksty w cudzej rubryce.
+    const DEFAULT_LANG = (LANGUAGES.find(l => l.default) || LANGUAGES[0]).id;
+
+    let counter = 0;
+    const uid = () => 'q-' + (++counter);
+
+    const buildLink = (link) => ({
+        uid: uid(),
+        open: false,
+        lang: DEFAULT_LANG,
+        langOpen: false,
+        type: link.type || 'custom',
+        id_category: link.id_category || 0,
+        id_cms: link.id_cms || 0,
+        new_tab: !!link.new_tab,
+        labels: Object.assign({}, link.labels || {}),
+        urls: Object.assign({}, link.urls || {})
+    });
+
+    const buildBlock = (block) => ({
+        uid: uid(),
+        open: false,
+        lang: DEFAULT_LANG,
+        langOpen: false,
+        id: block.id || 0,
+        hook: block.hook || 'displayFooter',
+        active: block.active !== false,
+        show_name: block.show_name !== false,
+        names: Object.assign({}, block.names || {}),
+        links: (block.links || []).map(buildLink)
+    });
+
+    return {
+        languages: LANGUAGES,
+        blocks: SAVED.map(buildBlock),
+
+        blockLabel(block) {
+            return String(block.names[block.lang] || block.names[DEFAULT_LANG] || '')
+                .trim() || {{ 'Block without a heading'|trans|json_encode|raw }};
+        },
+
+        linkLabel(link) {
+            const wpisana = String(link.labels[link.lang] || link.labels[DEFAULT_LANG] || '').trim();
+
+            if (wpisana) { return wpisana; }
+
+            // Bez własnej nazwy pozycja bierze ją z katalogu, w panelu pokazujemy
+            // wtedy, czym jest, zamiast pustego wiersza.
+            return link.type === 'custom'
+                ? {{ 'Link without a caption'|trans|json_encode|raw }}
+                : {{ 'Name from the catalogue'|trans|json_encode|raw }};
+        },
+
+        typeLabel(type) { return TYPES[type] || TYPES.custom; },
+
+        /* Kropka przy języku mówi o całym odnośniku: własny adres potrzebuje nazwy
+           i adresu, kategoria i strona treści biorą adres z katalogu. */
+        linkFilled(link, id) {
+            const nazwa = String(link.labels[id] || '').trim();
+
+            return link.type === 'custom'
+                ? nazwa !== '' && String(link.urls[id] || '').trim() !== ''
+                : true;
+        },
+
+        addBlock() {
+            this.blocks.push(buildBlock({ open: true }));
+            this.blocks[this.blocks.length - 1].open = true;
+        },
+
+        removeBlock(index) { this.blocks.splice(index, 1); },
+
+        addLink(block) {
+            block.links.push(buildLink({}));
+            block.links[block.links.length - 1].open = true;
+        },
+
+        moveBlock(uid, position) {
+            const from = this.blocks.findIndex(b => b.uid === uid);
+            this.blocks.splice(position, 0, this.blocks.splice(from, 1)[0]);
+        },
+
+        moveLink(block, uid, position) {
+            const from = block.links.findIndex(l => l.uid === uid);
+            block.links.splice(position, 0, block.links.splice(from, 1)[0]);
+        }
+    };
+}
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+{
+    "name": "quinceproject/linkblocks",
+    "description": "Quince Link Blocks: blocks of links for the footer",
+    "type": "prestashop-module",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "name": "Quince Project",
+            "email": "quinceproject@proton.me"
+        }
+    ],
+    "require": {
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Quince\\LinkBlocks\\": "src/"
+        }
+    },
+    "config": {
+        "prepend-autoloader": false
+    }
+}

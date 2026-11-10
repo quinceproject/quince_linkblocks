@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="ModulesQuincelinkblocksAdmin">
+    <body>
+
+      <trans-unit id="quince.linkblocks.name">
+        <source>Quince link blocks</source>
+        <target>Quince: bloki odnośników</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.label">
+        <source>Link blocks</source>
+        <target>Bloki odnośników</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.desc">
+        <source>Blocks of links for the footer: categories, content pages and addresses of your own.</source>
+        <target>Bloki odnośników do stopki: kategorie, strony treści i własne adresy.</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.uninstall">
+        <source>Uninstall the module? The blocks and their links will be removed.</source>
+        <target>Odinstalować moduł? Bloki i ich odnośniki zostaną usunięte.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.linkblocks.blocks">
+        <source>Blocks</source>
+        <target>Bloki</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.add">
+        <source>Add block</source>
+        <target>Dodaj blok</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.empty">
+        <source>No blocks yet. The footer will show nothing from this module until you add one.</source>
+        <target>Nie ma jeszcze żadnego bloku. Dopóki go nie dodasz, stopka nie pokaże stąd niczego.</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.saved">
+        <source>Blocks saved.</source>
+        <target>Bloki zapisane.</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.removed">
+        <source>Block removed.</source>
+        <target>Blok usunięty.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.linkblocks.heading">
+        <source>Heading</source>
+        <target>Nagłówek</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.hook">
+        <source>Hook</source>
+        <target>Hook</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.hook.hint">
+        <source>The same name you assign to a footer column in the engine settings.</source>
+        <target>Ta sama nazwa, którą przypisujesz kolumnie stopki w ustawieniach silnika.</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.block">
+        <source>Block</source>
+        <target>Blok</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.shown">
+        <source>Shown in the shop</source>
+        <target>Pokazywany w sklepie</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.heading.visible">
+        <source>Heading visible</source>
+        <target>Nagłówek widoczny</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.links">
+        <source>Links</source>
+        <target>Odnośniki</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.link">
+        <source>link</source>
+        <target>odnośnik</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.links.count">
+        <source>links</source>
+        <target>odnośników</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.link.add">
+        <source>Add link</source>
+        <target>Dodaj odnośnik</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.points">
+        <source>Points at</source>
+        <target>Prowadzi do</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.category">
+        <source>Category</source>
+        <target>Kategoria</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.cms">
+        <source>Content page</source>
+        <target>Strona treści</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.custom">
+        <source>Address of your own</source>
+        <target>Własny adres</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.choose">
+        <source>choose</source>
+        <target>wybierz</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.caption">
+        <source>Caption</source>
+        <target>Nazwa</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.caption.hint">
+        <source>Leave empty to use the name from the catalogue.</source>
+        <target>Zostaw puste, żeby wziąć nazwę z katalogu.</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.address">
+        <source>Address</source>
+        <target>Adres</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.address.hint">
+        <source>Each language can point somewhere else.</source>
+        <target>Każdy język może prowadzić gdzie indziej.</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.opening">
+        <source>Opening</source>
+        <target>Otwieranie</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.newtab">
+        <source>In a new tab</source>
+        <target>W nowej karcie</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.block.noname">
+        <source>Block without a heading</source>
+        <target>Blok bez nagłówka</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.link.nolabel">
+        <source>Link without a caption</source>
+        <target>Odnośnik bez nazwy</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.link.fromcatalogue">
+        <source>Name from the catalogue</source>
+        <target>Nazwa z katalogu</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.save">
+        <source>Save changes</source>
+        <target>Zapisz zmiany</target>
+      </trans-unit>
+
+      <trans-unit id="quince.linkblocks.lang">
+        <source>Language</source>
+        <target>Język</target>
+      </trans-unit>
+      <trans-unit id="quince.linkblocks.lang.empty">
+        <source>empty</source>
+        <target>puste</target>
+      </trans-unit>
+
+      <trans-unit id="quince.linkblocks.karta.opis">
+        <source>Lists of links shown in your shop. Most often in the footer.</source>
+        <target>Listy odnośników pokazywane w sklepie. Najczęściej w stopce.</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>
