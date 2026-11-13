@@ -1,5 +1,5 @@
 {**
- * Quince — bloki odnośników w stopce.
+ * Quince: bloki odnośników w stopce.
  *
  * Blok nie rysuje własnej kolumny: stoi w tej, do której stopka przypisała jego
  * hook. Stąd sam nagłówek i lista, bez opakowania na szerokość.

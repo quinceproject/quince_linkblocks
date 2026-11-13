@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Bloki odnośników.
  *
  * Dziedziczy po klasie z silnika, więc ekran dostaje ten sam sidebar, pasek
- * zapisu i wygląd co reszta panelu Quince — bez kopiowania czegokolwiek.
+ * zapisu i wygląd co reszta panelu Quince.
  */
 class BlocksController extends QuinceController
 {
@@ -49,8 +49,7 @@ class BlocksController extends QuinceController
      *
      * Ekran jest jednym formularzem, więc zapis też: bloki, ich nazwy i ich
      * odnośniki przychodzą razem i razem zastępują stan poprzedni. Blok, który
-     * zniknął z formularza, znika też z bazy — inaczej skasowanie w panelu
-     * wymagałoby osobnego kliknięcia i osobnego żądania.
+     * zniknął z formularza, znika też z bazy.
      */
     public function saveAction(Request $request): RedirectResponse
     {
@@ -106,8 +105,8 @@ class BlocksController extends QuinceController
     }
 
     /**
-     * Po zapisie moduł musi być zarejestrowany na hookach, których używają bloki —
-     * inaczej nowy hook wpisany w panelu nie wyświetli niczego.
+     * Po zapisie moduł musi być zarejestrowany na hookach, których używają bloki.
+     * Inaczej nowy hook wpisany w panelu nie wyświetli niczego.
      */
     private function registerHooks(): void
     {

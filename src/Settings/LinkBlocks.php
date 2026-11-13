@@ -24,7 +24,7 @@ use Language;
  *
  * Trzy tabele, bo trzy różne rzeczy: blok (gdzie stoi i czy działa), jego nazwa
  * w każdym języku, jego odnośniki. Odnośnik do kategorii i do strony treści
- * trzyma sam numer — nazwę i adres bierzemy przy wyświetlaniu, więc zmiana
+ * trzyma sam numer: nazwę i adres bierzemy przy wyświetlaniu, więc zmiana
  * nazwy w katalogu jest w stopce widoczna od razu.
  *
  * Własny adres jest wielojęzyczny, bo ta sama pozycja bywa inną stroną w innym
@@ -103,7 +103,7 @@ final class LinkBlocks
     }
 
     /**
-     * Hooki, w których stoją dziś bloki — moduł rejestruje się dokładnie na nie.
+     * Hooki, w których stoją dziś bloki. Moduł rejestruje się dokładnie na nie.
      *
      * @return string[]
      */
@@ -125,7 +125,7 @@ final class LinkBlocks
     }
 
     /**
-     * Wszystkie bloki do panelu — z nazwami w każdym języku i liczbą odnośników.
+     * Wszystkie bloki do panelu, z nazwami w każdym języku i liczbą odnośników.
      *
      * @return array<int,array<string,mixed>>
      */
@@ -158,7 +158,7 @@ final class LinkBlocks
     }
 
     /**
-     * Bloki jednego hooka, rozwiązane dla języka — to, co dostaje stopka.
+     * Bloki jednego hooka, rozwiązane dla języka: to, co dostaje stopka.
      *
      * Odnośnik bez adresu i bez nazwy wypada tutaj, a nie w szablonie: pusta
      * pozycja w stopce to wada, nie decyzja sklepu.
@@ -409,8 +409,8 @@ final class LinkBlocks
     /**
      * Kategorie sklepu do wyboru w odnośniku.
      *
-     * Dane bierze silnik — ten sam zestaw karmi wybieraki na wszystkich naszych
-     * ekranach, więc nie ma tu własnego zapytania do powielenia.
+     * Dane bierze silnik: ten sam zestaw karmi wybieraki na wszystkich naszych
+     * ekranach.
      *
      * @return array<int,array{id:int,name:string,depth:int,parent:int,sciezka:int[],dzieci:bool}>
      */

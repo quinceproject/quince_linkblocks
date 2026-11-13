@@ -18,10 +18,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Quince\LinkBlocks\Settings\LinkBlocks;
 
 /**
- * Quince Link Blocks — bloki odnośników do stopki.
+ * Quince Link Blocks: bloki odnośników do stopki.
  *
  * Blok to nagłówek i lista odnośników: kategorie sklepu, strony treści albo
- * własne adresy. Blok nie wie, gdzie stanie — deklaruje hook, a stopka silnika
+ * własne adresy. Blok nie wie, gdzie stanie: deklaruje hook, a stopka silnika
  * przypisuje hooki do kolumn. Dzięki temu przestawienie kolumn nie wymaga
  * ruszania bloków, a dołożenie bloku nie wymaga zmiany w motywie.
  *
@@ -93,7 +93,7 @@ class Quince_Linkblocks extends Module
     /**
      * Rejestracja na hooki, w które bloki się wyświetlają.
      *
-     * Blok wskazuje hook, więc lista nie jest znana z góry — rejestrujemy się na
+     * Blok wskazuje hook, więc lista nie jest znana z góry. Rejestrujemy się na
      * te, których używają istniejące bloki, plus wspólny hook stopki jako punkt
      * wyjścia dla sklepu, który nie ustawił jeszcze niczego.
      */
@@ -129,7 +129,7 @@ class Quince_Linkblocks extends Module
     /**
      * Wyświetlenie bloków przypisanych do hooka, w którym moduł został wywołany.
      *
-     * PrestaShop woła `hookDisplayFooter`, `hookDisplayFooterCompany` i tak dalej —
+     * PrestaShop woła `hookDisplayFooter`, `hookDisplayFooterCompany` i tak dalej;
      * zamiast pisać metodę na każdy możliwy hook, rozpoznajemy nazwę z wywołania.
      *
      * @param string $method
