@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Quince\LinkBlocks\Settings;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Category;
 use CMS;
 use Configuration;
