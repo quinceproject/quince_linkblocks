@@ -4,6 +4,14 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2026-11-15
+
+### Security
+
+- Links accept only `http`, `https`, `mailto`, `tel` and addresses within the shop.
+  A `javascript:` address is not saved and is not shown, also for links saved before
+  this version.
+
 ## [0.1.2] - 2026-11-15
 
 ### Security

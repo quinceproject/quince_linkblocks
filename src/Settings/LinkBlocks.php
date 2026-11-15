@@ -241,7 +241,9 @@ final class LinkBlocks
                 ];
 
             default:
-                $adres = trim((string) ($link['urls'][$idLang] ?? ''));
+                // Sprawdzane też tutaj, nie tylko przy zapisie: odnośnik
+                // zapisany przed tą poprawką nie trafi do `href`.
+                $adres = self::adresLinku((string) ($link['urls'][$idLang] ?? ''));
 
                 if ($adres === '' || $wlasnaNazwa === '') {
                     return null;
@@ -392,10 +394,32 @@ final class LinkBlocks
                     'id_quince_linkblock_link' => $idLink,
                     'id_lang' => $idLang,
                     'label' => pSQL((string) ($link['labels'][$idLang] ?? '')),
-                    'url' => pSQL((string) ($link['urls'][$idLang] ?? '')),
+                    'url' => pSQL(self::adresLinku((string) ($link['urls'][$idLang] ?? ''))),
                 ]);
             }
         }
+    }
+
+    /**
+     * Adres odnośnika: http(s), mailto, tel albo adres względny. Inny schemat
+     * (`javascript:`, `data:`) trafiłby wprost do `href` i wykonał się
+     * u klikającego klienta. Encje i znaki sterujące usuwamy tylko na czas
+     * sprawdzenia, bo przeglądarka też je pomija, czytając schemat.
+     */
+    private static function adresLinku(string $adres): string
+    {
+        $adres = trim($adres);
+        $doSprawdzenia = preg_replace('/[\x00-\x20\x7F]+/', '', html_entity_decode($adres, ENT_QUOTES | ENT_HTML5, 'UTF-8')) ?? '';
+
+        if ($doSprawdzenia === '') {
+            return '';
+        }
+
+        if (preg_match('/^([a-z][a-z0-9+.-]*):/i', $doSprawdzenia, $schemat) === 1) {
+            return in_array(strtolower($schemat[1]), ['http', 'https', 'mailto', 'tel'], true) ? $adres : '';
+        }
+
+        return $adres;
     }
 
     public function delete(int $id): void
