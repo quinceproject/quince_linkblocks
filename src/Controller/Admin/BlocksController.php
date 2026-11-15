@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Quince\LinkBlocks\Controller\Admin;
 
+use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Quince\Engine\Controller\Admin\QuinceController;
 use Quince\LinkBlocks\Settings\LinkBlocks;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -29,6 +30,7 @@ class BlocksController extends QuinceController
     {
     }
 
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message: 'You do not have permission to view this.')]
     public function indexAction(): Response
     {
         $idLang = (int) $this->getContext()->language->id;
@@ -51,6 +53,7 @@ class BlocksController extends QuinceController
      * odnośniki przychodzą razem i razem zastępują stan poprzedni. Blok, który
      * zniknął z formularza, znika też z bazy.
      */
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
     public function saveAction(Request $request): RedirectResponse
     {
         if (!$this->isCsrfTokenValid('quince_linkblocks_save', $request->request->get('_csrf_token'))) {
@@ -88,6 +91,7 @@ class BlocksController extends QuinceController
         return $this->redirectToRoute('quince_linkblocks');
     }
 
+    #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", message: 'You do not have permission to delete this.')]
     public function deleteAction(int $id, Request $request): RedirectResponse
     {
         if (!$this->isCsrfTokenValid('quince_linkblocks_delete', $request->request->get('_csrf_token'))) {
